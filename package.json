@@ -1,0 +1,47 @@
+{
+  "name": "express-webapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "init": "tsc --init",
+    "build": "tsc",
+    "start": "node dist/main",
+    "dev": "nodemon src/main.ts",
+    "typeorm:gen": "typeorm-ts-node-commonjs migration:generate -d src/database/app-data-source.ts src/database/migrations/migration",
+    "typeorm:run": "typeorm-ts-node-commonjs migration:run -d src/database/app-data-source.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/longlt201203/express-webapi.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/longlt201203/express-webapi/issues"
+  },
+  "homepage": "https://github.com/longlt201203/express-webapi#readme",
+  "dependencies": {
+    "@types/multer": "^1.4.7",
+    "@types/swagger-ui-express": "^4.1.3",
+    "chalk": "^4.1.2",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mssql": "^7.3.5",
+    "multer": "^1.4.5-lts.1",
+    "reflect-metadata": "^0.1.13",
+    "swagger-ui-express": "^4.6.2",
+    "typeorm": "^0.3.11"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.17",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.3"
+  }
+}
