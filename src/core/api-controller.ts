@@ -45,7 +45,6 @@ export default class ApiController {
     constructor(
         private readonly path: string
     ) {
-        SwaggerDocs.tags.push({ name: this.path });
         this.router = Router();
     }
 
