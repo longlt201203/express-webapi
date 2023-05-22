@@ -6,16 +6,21 @@ import TestDto from "./test.dto";
 import Main from "../../main";
 
 export default class TestController extends ApiController {
-    constructor() {
-        super("/test");
+	constructor() {
+		super("/test");
 
-        this.addHandler(HttpMethod.GET, "/", this.getTest, DtoMapper.fromQuery(TestDto));
-    }
+		this.addHandler(
+			HttpMethod.GET,
+			"/",
+			this.getTest,
+			DtoMapper.fromQuery(TestDto)
+		);
+	}
 
-    private async getTest(req: Request, res: Response) {
-        // throw new Error("test error!!!!!!");
-        const dto: TestDto = req.query;
-        // Main.Logger.debug(`Test dto:\n${JSON.stringify(dto, null, 2)}`);
-        return res.status(HttpStatusCode.OK).send("Hello World!");
-    }
+	private async getTest(req: Request, res: Response) {
+		// throw new Error("test error!!!!!!");
+		const dto: TestDto = req.query;
+		// Main.Logger.debug(`Test dto:\n${JSON.stringify(dto, null, 2)}`);
+		return res.status(HttpStatusCode.OK).send("Hello World!");
+	}
 }
