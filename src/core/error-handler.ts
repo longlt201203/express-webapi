@@ -9,14 +9,23 @@ import { Logger } from "./logger";
  * @param req - Request
  * @param res - Response
  * @param next - NextFunction
- * @returns 
+ * @returns
  */
-export function ErrorHandler(err: Error, req: Request, res: Response, next: NextFunction) {
-    new Logger(`${req.method} ${req.originalUrl}`).error(`Internal server error with message: ${err.message}\nError object:\n${JSON.stringify(err, null, 2)}`);
-    return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send({
-        message: "Internal server error",
-        error: err
-    });
+export function ErrorHandler(
+	err: Error,
+	req: Request,
+	res: Response,
+	next: NextFunction
+) {
+	new Logger(`${req.method} ${req.originalUrl}`).error(
+		`Internal server error with message: ${
+			err.message
+		}\nError object:\n${JSON.stringify(err, null, 2)}`
+	);
+	return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send({
+		message: "Internal server error",
+		error: err,
+	});
 }
 
 /**
@@ -26,11 +35,15 @@ export function ErrorHandler(err: Error, req: Request, res: Response, next: Next
  * @param req - Request
  * @param res - Response
  * @param next - NextFunction
- * @returns 
+ * @returns
  */
-export function NotFoundHandler(req: Request, res: Response, next: NextFunction) {
-    new Logger(`${req.method} ${req.originalUrl}`).warn(`Not found`);
-    return res.status(HttpStatusCode.NOT_FOUND).send({
-        message: "Not found",
-    });
+export function NotFoundHandler(
+	req: Request,
+	res: Response,
+	next: NextFunction
+) {
+	new Logger(`${req.method} ${req.originalUrl}`).warn(`Not found`);
+	return res.status(HttpStatusCode.NOT_FOUND).send({
+		message: "Not found",
+	});
 }
