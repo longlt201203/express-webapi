@@ -24,7 +24,13 @@ export type Request = Omit<Express.Request, "body" | "query" | "params"> & {
 	body: any;
 	query: any;
 	params: any;
+	custom?: any;
 };
+
+export const RequestInitializer: RequestHandler = async (req, res, next) => {
+	req.custom = {};
+	return next();
+}
 
 export type RequestHandler = (
 	req: Request,

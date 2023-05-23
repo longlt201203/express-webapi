@@ -1,5 +1,5 @@
 import Express, { Application } from "express";
-import ApiController from "./api-controller";
+import ApiController, { RequestInitializer } from "./api-controller";
 import cors from "cors";
 import bodyParser from "body-parser";
 import { NotFoundHandler, ErrorHandler } from "./error-handler";
@@ -13,7 +13,8 @@ export default class WebApi {
 		private readonly controllers: Array<ApiController>
 	) {
 		this.app = Express();
-		// Add your middlewares here
+		// Add your global middlewares here
+		this.app.use(RequestInitializer);
 		this.app.use(bodyParser.json());
 		this.app.use(bodyParser.urlencoded({ extended: true }));
 		this.app.use(cors());

@@ -76,7 +76,7 @@ export default class UserController extends ApiController {
 ```
 Note that `Request` is imported from `core/api-controller.ts`.
 
-You can use `DtoMapper`, which is built from `class-validator` and `class-transformer`, to validate and convert your request body, query or params to your desired type. Example:
+You can use `DtoMapper`, which is built from [`class-validator`](https://www.npmjs.com/package/class-validator) and [`class-transformer`](https://www.npmjs.com/package/class-transformer), to validate and convert your request body, query or params to your desired type. Example:
 ```typescript
 import { IsEmail, IsNumber } from "class-validator";
 
@@ -103,7 +103,7 @@ export default class UserController extends ApiController {
 }
 ```
 Finally, add an instance of your controller to `main.ts` here:
-```javascript
+```typescript
 static async init() {
   // Other initializations
 
@@ -117,7 +117,7 @@ static async init() {
 }
 ```
 ## Model
-For database, you can learn TypeORM [here](). You can find some data source configs in `datasource.config.ts` and the data source for app is in `app-data-source.ts`.
+For database, you can learn TypeORM [here](https://typeorm.io/). You can find some data source configs in `datasource.config.ts` and the data source for app is in `app-data-source.ts`.
 ```shell
 # Generate migration
 npm run typeorm:gen
@@ -126,3 +126,70 @@ npm run typeorm:gen
 npm run typeorm:run
 ```
 You can access database by using `Main.DataSource`
+## Middleware
+There are 2 types of middleware in this project: `global` and `handler`. Middleware can be used for filtering, authorizing, logging, pre-processing, etc. Both global and handler middleware should be construct base on `RequestHandler` imported from `core/api-controller.ts`. Global middleware is put in the middleware section in the constructor of `WebApi` at file `web-api.ts`:
+```typescript
+constructor(
+	private readonly port: number,
+	private readonly controllers: Array<ApiController>
+) {
+	this.app = Express();
+	// Add your global middlewares here
+	this.app.use(RequestInitializer);
+	this.app.use(bodyParser.json());
+	this.app.use(bodyParser.urlencoded({ extended: true }));
+	this.app.use(cors());
+
+	// -------------------------
+	for (let controller of this.controllers) {
+		this.app.use(controller.Path, controller.Router);
+	}
+	this.app.use(NotFoundHandler);
+	this.app.use(ErrorHandler);
+}
+```
+For handler middleware, we can put it after the handler in the `addHandler` method like this:
+```typescript
+this.addHandler(HttpMethod.GET, "/middleware-hi", this.testWithMiddleware, DemoMiddleware.sayHi());
+```
+Here is an example of a middleware container file:
+```typescript
+import { NextFunction, Response } from "express";
+import { Request } from "../core/api-controller";
+import { Logger } from "../core/logger";
+
+export default class DemoMiddleware {
+    private static logger = new Logger("DemoMiddleware");
+
+    static sayHi() {
+        return async (req: Request, res: Response, next: NextFunction) => {
+            this.logger.info("Hi");
+            return next();
+        }
+    }
+
+    static saySomeThing(something: string) {
+        return async (req: Request, res: Response, next: NextFunction) => {
+            // Put something to req.custom
+            req.custom.test = "Hello";
+            this.logger.info(something);
+            return next();
+        }
+    }
+}
+```
+Notice that we can set value for `req.custom` and then get it later from other middleware or handler. You shouldn't override `req.custom` like this:
+```typescript
+req.custom = { hello: "world" };
+```
+Instead, use spread operator or simply add another property to it:
+```typescript
+req.custom = {
+  ...req.custom,
+  hello: "world"
+};
+```
+or
+```typescript
+req.custom.hello = "world";
+```
