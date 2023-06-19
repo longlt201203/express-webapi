@@ -66,11 +66,13 @@ export default class UserController extends ApiController {
     constructor() {
         super("/auth");
 
-        this.addHandler(HttpMethod.GET, "/", this.test);
+        this.addHandler(HttpMethod.GET, "/", this.test());
     }
 
-    async test(req: Request, res: Response, next: NextFunction) {
-        return res.status(HttpStatusCode.OK).send("Test Auth");
+    private test(req: Request, res: Response, next: NextFunction) {
+        return async (req: Request, res: Response) => {
+           return res.status(HttpStatusCode.OK).send("Test Auth");
+        }
     }
 }
 ```
@@ -94,11 +96,13 @@ export default class UserController extends ApiController {
     constructor() {
         super("/auth");
 
-        this.addHandler(HttpMethod.GET, "/", this.test, DtoMapper.fromBody(TestDto));
+        this.addHandler(HttpMethod.GET, "/", this.test(), DtoMapper.fromBody(TestDto));
     }
 
-    async test(req: Request, res: Response, next: NextFunction) {
-        return res.status(HttpStatusCode.OK).send("Test Auth");
+    private test(req: Request, res: Response, next: NextFunction) {
+        return async (req: Request, res: Response) => {
+           return res.status(HttpStatusCode.OK).send("Test Auth");
+        }
     }
 }
 ```
