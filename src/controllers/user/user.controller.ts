@@ -9,21 +9,25 @@ export default class UserController extends ApiController {
 	constructor() {
 		super("/user");
 
-		this.addHandler(HttpMethod.GET, "/", this.getAll);
+		this.addHandler(HttpMethod.GET, "/", this.getAll());
 		this.addHandler(
 			HttpMethod.POST,
 			"/upload-avt",
-			this.uploadAvt,
+			this.uploadAvt(),
 			Upload("UserAvt").single("avt")
 		);
 	}
 
-	async getAll(req: Request, res: Response, next: NextFunction) {
-		const users = await Main.DataSource.getRepository(UserModel).find();
-		return res.send(users);
+	private getAll() {
+		return async (req: Request, res: Response) => {
+			const users = await Main.DataSource.getRepository(UserModel).find();
+			return res.send(users);
+		}
 	}
 
-	async uploadAvt(req: Request, res: Response, next: NextFunction) {
-		return res.send(`File uploaded at ${req.file?.path}`);
+	private uploadAvt() {
+		return async (req: Request, res: Response) => {
+			return res.send(`File uploaded at ${req.file?.path}`);
+		}
 	}
 }
