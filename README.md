@@ -69,7 +69,7 @@ export default class UserController extends ApiController {
         this.addHandler(HttpMethod.GET, "/", this.test());
     }
 
-    private test(req: Request, res: Response, next: NextFunction) {
+    private test() {
         return async (req: Request, res: Response) => {
            return res.status(HttpStatusCode.OK).send("Test Auth");
         }
@@ -99,7 +99,7 @@ export default class UserController extends ApiController {
         this.addHandler(HttpMethod.GET, "/", this.test(), DtoMapper.fromBody(TestDto));
     }
 
-    private test(req: Request, res: Response, next: NextFunction) {
+    private test() {
         return async (req: Request, res: Response) => {
            return res.status(HttpStatusCode.OK).send("Test Auth");
         }
