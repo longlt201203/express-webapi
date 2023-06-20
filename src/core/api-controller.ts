@@ -43,6 +43,7 @@ export type RequestHandler = (
  */
 export default class ApiController {
 	private readonly router: Router;
+	private readonly handlers: Array<string> = [];
 
 	get Path(): string {
 		return this.path;
@@ -50,6 +51,10 @@ export default class ApiController {
 
 	get Router(): Router {
 		return this.router;
+	}
+
+	get Handlers(): Array<string> {
+		return this.handlers;
 	}
 
 	constructor(private readonly path: string) {
@@ -62,6 +67,7 @@ export default class ApiController {
 		handler: RequestHandler,
 		...middlewares: RequestHandler[]
 	): void {
+		this.handlers.push(`${method.toUpperCase()} ${this.path}${alias}`);
 		this.router[method](
 			alias,
 			...middlewares,

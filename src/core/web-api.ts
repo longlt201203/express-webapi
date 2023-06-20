@@ -27,6 +27,10 @@ export default class WebApi {
 		this.app.use(ErrorHandler);
 	}
 
+	get Controllers(): Array<ApiController> {
+		return this.controllers;
+	}
+
 	start(): void {
 		this.app.listen(this.port, () => {
 			Main.Logger.info(`Web API is running at http://localhost:${this.port}`);
