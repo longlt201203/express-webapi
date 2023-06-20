@@ -197,3 +197,29 @@ or
 ```typescript
 req.custom.hello = "world";
 ```
+## List API
+You can keep track of your APIs using `Main.Application.Controllers`. Here is the example of it:
+```typescript
+// list-api.controller.ts
+
+export default class ListApiController extends ApiController {
+    constructor() {
+        super("/list-api");
+        this.addHandler(HttpMethod.GET, "/", this.listAPI());
+    }
+
+    private listAPI() {
+        return async (req: Request, res: Response) => {
+            const data = Main.Application.Controllers.map((controller) => ({
+                controller: controller.Path,
+                handlers: controller.Handlers,
+            }));
+            return res.status(200).send(data);
+        }
+    }
+}
+```
+Call `GET /list-api/` and you will receive a JSON like this:
+```
+[{"controller":"/list-api","handlers":["GET /list-api/"]},{"controller":"/test","handlers":["GET /test/","GET /test/middleware-hi","GET /test/middleware-hello"]},{"controller":"/user","handlers":["GET /user/","POST /user/upload-avt"]}]
+```

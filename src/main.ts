@@ -6,6 +6,7 @@ import WebApi from "./core/web-api";
 import AppDataSource from "./database/app-data-source";
 import UserController from "./controllers/user/user.controller";
 import { Logger } from "./core/logger";
+import ListApiController from "./controllers/list-api.controller";
 
 export default class Main {
 	private static _datasource: DataSource;
@@ -32,6 +33,7 @@ export default class Main {
 		// -----------------------------
 		this._application = new WebApi(Globals.APP_PORT, [
 			// Add your controllers here
+			new ListApiController(),
 			new TestController(),
 			new UserController(),
 			// -------------------------
